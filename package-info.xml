@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<id>NEND:clonetopic</id>
+	<name>Clone Topic</name>
+	<version>0.4</version>
+	<type>modification</type>
+<install>
+	<database>db.php</database>
+	<readme parsebbc="true">license.txt</readme>
+	<modification format="xml" type="file">install.xml</modification>
+	<require-file name="CloneTopic.php" destination="$sourcedir" />
+	<require-file name="CloneTopic.template.php" destination="$themedir" />
+</install>
+<uninstall>
+	<modification reverse="true">install.xml</modification>
+	<remove-file name="$sourcedir/CloneTopic.php" />
+	<remove-file name="$themedir/CloneTopic.template.php" />
+</uninstall>
+</package-info>
