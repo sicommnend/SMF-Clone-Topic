@@ -58,14 +58,8 @@ $txt['permissionname_simple_clone_any'] = 'Clone anyone\'s topic';
 
 	<file name="$sourcedir/MessageIndex.php">
 		<operation>
-			<search position="before"><![CDATA[	// Setup the default topic icons...
-	$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-	$context['icon_sources'] = array();
-	foreach ($stable_icons as $icon)
-		$context['icon_sources'][$icon] = 'images_url';
-
-	$topic_ids = array();
-	$context['topics'] = array();]]></search>
+			<search position="before"><![CDATA[	// How many topics do we have in total?
+	$board_info['total_topics'] = allowedTo('approve_posts') ? $board_info['num_topics'] + $board_info['unapproved_topics'] : $board_info['num_topics'] + $board_info['unapproved_user_topics'];]]></search>
 			<add><![CDATA[
 	// Get the topic ids of clones
 	$request = $smcFunc['db_query']('', '
@@ -77,9 +71,10 @@ $txt['permissionname_simple_clone_any'] = 'Clone anyone\'s topic';
 		)
 	);
 	$clone_topics = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		$clone_topics[] = $row['id_topic'];
-
+		$board_info['total_topics']++;
+	}
 ]]></add>
 		</operation>
 		<operation>
