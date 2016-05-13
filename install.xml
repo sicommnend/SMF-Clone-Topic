@@ -2,13 +2,44 @@
 <!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
 <modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
 	<id>NEND:clonetopic</id>
-	<version>0.4.1</version>
+	<version>0.4.2</version>
 	<file name="$boarddir/index.php">
 		<operation>
 			<search position="after"><![CDATA[		'credits' => array('Who.php', 'Credits'),
 		'deletemsg' => array('RemoveTopic.php', 'DeleteMessage'),]]></search>
 			<add><![CDATA[		'clonetopic' => array('CloneTopic.php', 'CloneTopic'),
 		'clonetopic2' => array('CloneTopic.php', 'CloneTopic2'),
+]]></add>
+		</operation>
+	</file>
+	<file name="$sourcedir/RemoveTopic.php">
+		<operation>
+			<search position="after"><![CDATA[	// Recycle topics that aren't in the recycle board...]]></search>
+			<add><![CDATA[
+	// Delete the clones.
+	$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}topic_clones
+		WHERE id_topic IN ({array_int:topics})',
+		array(
+			'topics' => $topics,
+		)
+	);
+]]></add>
+		</operation>
+	</file>
+	<file name="$sourcedir/MoveTopic.php">
+		<operation>
+			<search position="after"><![CDATA[	// Rename the topic...]]></search>
+			<add><![CDATA[
+	// Delete the clones.
+	$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}topic_clones
+		WHERE id_topic = {int:topic} AND id_board = {int:board}',
+		array(
+			'topic' => $topic,
+			'board' => $_POST['toboard'],
+		)
+	);
 ]]></add>
 		</operation>
 	</file>
