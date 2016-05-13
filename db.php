@@ -32,4 +32,21 @@ db_extend('packages');
 			'columns' => array('id_board'),
 		),
 	), 'update');
+
+	// Repair any old bugs.
+	// Delete dupes
+	$smcFunc['db_query']('', '
+		DELETE c FROM {db_prefix}topic_clones AS c
+			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = c.id_topic)
+		WHERE t.id_board = c.id_board AND t.id_topic = c.id_topic',
+		array()
+	);
+
+	// Delete non exists
+	$smcFunc['db_query']('', '
+		DELETE c FROM {db_prefix}topic_clones AS c
+			LEFT JOIN {db_prefix}messages AS m ON (m.id_topic = c.id_topic)
+		WHERE m.id_topic IS NULL',
+		array()
+	);
 ?>
