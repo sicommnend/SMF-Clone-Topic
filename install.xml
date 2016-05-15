@@ -2,7 +2,7 @@
 <!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
 <modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
 	<id>NEND:clonetopic</id>
-	<version>0.4.2</version>
+	<version>0.4.3</version>
 	<file name="$boarddir/index.php">
 		<operation>
 			<search position="after"><![CDATA[		'credits' => array('Who.php', 'Credits'),
@@ -122,7 +122,9 @@ $txt['permissionname_simple_clone_any'] = 'Clone anyone\'s topic';
 				LEFT JOIN {db_prefix}members AS meml ON (meml.id_member = ml.id_member)' : '') . '
 			WHERE t.id_board = {int:current_board}' . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
 				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') . ']]></search>
-			<add><![CDATA['.($clone_topics ? ' OR t.id_topic IN ({array_int:clone_topics})' : '' ).']]></add>
+			<add><![CDATA[
+				'.($clone_topics ? 'OR t.id_topic IN ({array_int:clone_topics})' : '' ).(!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
+				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') .']]></add>
 		</operation>
 		<operation>
 			<search position="before"><![CDATA[			ORDER BY ' . (!empty($modSettings['enableStickyTopics']) ? 'is_sticky' . ($fake_ascending ? '' : ' DESC') . ', ' : '') . $_REQUEST['sort'] . ($ascending ? '' : ' DESC') . '
@@ -158,7 +160,9 @@ $txt['permissionname_simple_clone_any'] = 'Clone anyone\'s topic';
 				LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = {int:current_board} AND lmr.id_member = {int:current_member})'). '
 			WHERE ' . ($pre_query ? 't.id_topic IN ({array_int:topic_list})' : 't.id_board = {int:current_board}') . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
 				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') . ']]></search>
-			<add><![CDATA['.($clone_topics ? ' OR t.id_topic IN ({array_int:clone_topics})' : '' ).']]></add>
+			<add><![CDATA[
+				'.($clone_topics ? 'OR t.id_topic IN ({array_int:clone_topics})' : '' ).(!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
+				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') .']]></add>
 		</operation>
 		<operation>
 			<search position="before"><![CDATA[			ORDER BY ' . ($pre_query ? 'FIND_IN_SET(t.id_topic, {string:find_set_topics})' : (!empty($modSettings['enableStickyTopics']) ? 'is_sticky' . ($fake_ascending ? '' : ' DESC') . ', ' : '') . $_REQUEST['sort'] . ($ascending ? '' : ' DESC')) . '
