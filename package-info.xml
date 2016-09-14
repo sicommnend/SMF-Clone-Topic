@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>NEND:clonetopic</id>
 	<name>Clone Topic</name>
-	<version>0.4.3</version>
+	<version>0.4.5</version>
 	<type>modification</type>
 <install>
 	<database>db.php</database>
